@@ -23,7 +23,7 @@ func registerNewUser(login string, password string) (*models.User, ErrorInMethod
 	user = &models.User{}
 	user.Login = login
 	user.Password = password
-	user.Token = helpers.RandStringByLength(models.TOKEN_LENGTH)
+	user.Token = helpers.RandStringByLength(models.TokenLength)
 	err := user.Validate()
 	if err != nil {
 		err := &ErrorInMethod{}

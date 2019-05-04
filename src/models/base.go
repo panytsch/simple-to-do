@@ -1,5 +1,7 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type ModelInterface interface {
 	SaveNew()
 	Update()
@@ -8,5 +10,5 @@ type ModelInterface interface {
 }
 
 type Model struct {
-	ID uint
+	gorm.Model
 }

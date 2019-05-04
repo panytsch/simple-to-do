@@ -6,9 +6,11 @@ import (
 	"simple-to-do/src/helpers"
 )
 
-const NAME_LENGTH = 30
-const PASSWORD_LENGTH = 100
-const TOKEN_LENGTH = 300
+const (
+	NameLength     = 30
+	PasswordLength = 100
+	TokenLength    = 300
+)
 
 func init() {
 	db.GetDB().AutoMigrate(&User{})
@@ -19,6 +21,7 @@ type User struct {
 	Login    string `gorm:"type:varchar(30);unique_index;not null"`  //NAME_LENGTH
 	Password string `gorm:"type:varchar(100); not null"`             //PASSWORD_LENGTH
 	Token    string `gorm:"type:varchar(300);unique_index;not null"` //TOKEN_LENGTH
+	Todos    []Todo
 }
 
 func (User) TableName() string {
@@ -34,25 +37,25 @@ func FindByNamePass(name string, pass string) *User {
 	return nil
 }
 
-func (user *User) Validate() error {
-	if len(user.Login) > NAME_LENGTH {
+func (u *User) Validate() error {
+	if len(u.Login) > NameLength {
 		return errors.New("login is too large")
 	}
 
-	if len(user.Password) > PASSWORD_LENGTH {
+	if len(u.Password) > PasswordLength {
 		return errors.New("password is too large")
 	}
 
-	if len(user.Token) > TOKEN_LENGTH {
+	if len(u.Token) > TokenLength {
 		return errors.New("token is too large")
 	}
 
-	if !CheckToken(user.Token) {
-		user.Token = helpers.RandStringByLength(TOKEN_LENGTH)
-		return user.Validate() //be careful dude :)
+	if !CheckToken(u.Token) {
+		u.Token = helpers.RandStringByLength(TokenLength)
+		return u.Validate() //be careful dude :)
 	}
 
-	if !CheckLogin(user.Login) {
+	if !CheckLogin(u.Login) {
 		return errors.New("user already exist")
 	}
 
@@ -83,6 +86,6 @@ func (u *User) Delete() {
 	db.GetDB().Delete(u)
 }
 
-func (u *User) FindById(id int) {
+func (u *User) FindById(id uint) {
 	db.GetDB().Where("id = ?", id).Find(u)
 }

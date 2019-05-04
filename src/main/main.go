@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"simple-to-do/src/api/method"
 	"simple-to-do/src/db"
+	wsmethod "simple-to-do/src/websocket/method"
 	"time"
 )
 
@@ -13,12 +14,9 @@ func main() {
 	dir := "./front/build"
 	router := mux.NewRouter()
 
-	router.PathPrefix("/api/auth").HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		method.Login(writer, request)
-	})
-	router.PathPrefix("/api/register").HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		method.Register(writer, request)
-	})
+	router.PathPrefix("/api/v1/auth").HandlerFunc(method.Login)
+	router.PathPrefix("/api/v1/register").HandlerFunc(method.Register)
+	router.PathPrefix("/ws/v1/todo").HandlerFunc(wsmethod.TodoHandler)
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir(dir)))
 	srv := &http.Server{
