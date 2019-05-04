@@ -12,3 +12,8 @@ type SuccessfulRegister struct {
 	Response
 	Token string
 }
+
+type SuccessfulLogin struct {
+	Response
+	Token string
+}

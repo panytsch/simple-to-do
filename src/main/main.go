@@ -12,8 +12,9 @@ import (
 func main() {
 	dir := "./front/build"
 	router := mux.NewRouter()
-	router.PathPrefix("/api/auth").HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 
+	router.PathPrefix("/api/auth").HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		method.Login(writer, request)
 	})
 	router.PathPrefix("/api/register").HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		method.Register(writer, request)
