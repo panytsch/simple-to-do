@@ -89,3 +89,16 @@ func (u *User) Delete() {
 func (u *User) FindById(id uint) {
 	db.GetDB().Where("id = ?", id).Find(u)
 }
+
+func GetUserByToken(token string) *User {
+	user := &User{}
+	db.GetDB().Where("token = ?", token).Find(user)
+	return user
+}
+
+func (u *User) GetAllTodos() []Todo {
+	var todos []Todo
+	selectFileds := []string{"id", "created_at", "deleted_at", "title", "description", "is_done"}
+	db.GetDB().Where("user_id = ?", u.ID).Select(selectFileds).Find(&todos)
+	return todos
+}
