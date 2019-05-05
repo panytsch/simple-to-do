@@ -37,6 +37,10 @@ func registerNewUser(login string, password string) (*models.User, ErrorInMethod
 }
 
 func Register(writer http.ResponseWriter, request *http.Request) {
+	setupResponse(&writer, request)
+	if request.Method == "OPTIONS" {
+		return
+	}
 	writer.Header().Add("Content-Type", "application/json")
 
 	user, err := registerNewUser(request.Header.Get("login"), request.Header.Get("password"))

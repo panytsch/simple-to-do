@@ -10,6 +10,10 @@ import (
 )
 
 func Login(writer http.ResponseWriter, request *http.Request) {
+	setupResponse(&writer, request)
+	if request.Method == "OPTIONS" {
+		return
+	}
 	writer.Header().Add("Content-Type", "application/json")
 
 	user, err := login(request.Header.Get("login"), request.Header.Get("password"))

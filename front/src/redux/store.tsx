@@ -3,7 +3,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import {Action, ReduxState} from "./structs";
 
-const reducer = (state :ReduxState = getBaseState(), action :Action) => {
+const data = (state :ReduxState = getBaseState(), action :Action) => {
     // console.log(state);
     // console.log(action);
     return state;
@@ -17,7 +17,7 @@ function getBaseState() :ReduxState {
     };
 }
 
-const reducers = combineReducers({ reducer });
+const reducers = combineReducers({ data });
 
 const Store = createStore(
     reducers,
