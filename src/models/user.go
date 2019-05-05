@@ -24,6 +24,11 @@ type User struct {
 	Todos    []Todo
 }
 
+type ResponseUser struct {
+	Login string
+	Token string
+}
+
 func (User) TableName() string {
 	return "users"
 }
@@ -98,7 +103,14 @@ func GetUserByToken(token string) *User {
 
 func (u *User) GetAllTodos() []Todo {
 	var todos []Todo
-	selectFileds := []string{"id", "created_at", "deleted_at", "title", "description", "is_done"}
-	db.GetDB().Where("user_id = ?", u.ID).Select(selectFileds).Find(&todos)
+	selectFields := []string{"id", "created_at", "updated_at", "title", "description", "is_done"}
+	db.GetDB().Where("user_id = ?", u.ID).Where("deleted_at is null").Select(selectFields).Find(&todos)
 	return todos
+}
+
+func (u *User) GetResponseUser() ResponseUser {
+	user := ResponseUser{}
+	user.Login = u.Login
+	user.Token = u.Token
+	return user
 }

@@ -15,12 +15,12 @@ type (
 	ClientRequest struct {
 		Type   Type
 		TodoID uint
-		Todo   models.Todo
-		Todos  []models.Todo
+		Todo   models.ResponseTodo
+		Todos  []models.ResponseTodo
 		Token  string
 	}
 	ClientResponse struct {
-		Todos   []models.Todo
+		Todos   []models.ResponseTodo
 		Fail    bool
 		Message string
 	}

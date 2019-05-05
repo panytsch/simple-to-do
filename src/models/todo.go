@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"log"
 	"simple-to-do/src/db"
 )
 
@@ -23,6 +24,13 @@ type Todo struct {
 	UserID      uint
 }
 
+type ResponseTodo struct {
+	ID          uint
+	Title       string
+	Description string
+	IsDone      bool
+}
+
 func (todo *Todo) Validate() error {
 	if len(todo.Title) > TitleLength {
 		return errors.New("title is too large")
@@ -35,10 +43,7 @@ func (todo *Todo) Validate() error {
 	user := User{}
 	user.FindById(todo.UserID)
 	if user.ID == 0 {
-		return errors.New("wrong user ID")
-	}
-
-	if user.ID == todo.User.ID {
+		log.Println("created user:", user, "todo:", todo)
 		return errors.New("wrong user ID")
 	}
 
@@ -59,4 +64,22 @@ func (todo *Todo) Delete() {
 
 func (todo *Todo) FindById(id int) {
 	db.GetDB().Where("id = ?", id).Find(todo)
+}
+
+//convert responseTodo to to do
+func (todo *Todo) BuildFromResponseTodo(responseTodo ResponseTodo) {
+	todo.Description = responseTodo.Description
+	todo.Title = responseTodo.Title
+	todo.ID = responseTodo.ID
+	todo.IsDone = responseTodo.IsDone
+}
+
+//Get to do in type response
+func (todo *Todo) GetResponseTodo() ResponseTodo {
+	responseTodo := ResponseTodo{}
+	responseTodo.ID = todo.ID
+	responseTodo.IsDone = todo.IsDone
+	responseTodo.Title = todo.Title
+	responseTodo.Description = todo.Description
+	return responseTodo
 }
