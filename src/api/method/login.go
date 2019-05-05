@@ -16,7 +16,19 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 	}
 	writer.Header().Add("Content-Type", "application/json")
 
-	user, err := login(request.Header.Get("login"), request.Header.Get("password"))
+	postRequest := entities.PostLoginRequest{}
+	decoder := json.NewDecoder(request.Body)
+	er := decoder.Decode(&postRequest)
+	if er != nil {
+		log.Println("wrong request: ", er.Error())
+		response := entities.ErrorResponse{}
+		response.Message = er.Error()
+		writer.WriteHeader(http.StatusForbidden)
+		jsonResponse, _ := json.Marshal(response)
+		_, _ = writer.Write(jsonResponse)
+		return
+	}
+	user, err := login(postRequest.Login, postRequest.Password)
 	if err != nil {
 		log.Println("login catch err: ", err.Error(), " code: ", err.GetCode())
 
@@ -66,7 +78,7 @@ func login(login string, password string) (*models.User, ErrorInMethodInterface)
 	user := models.FindByNamePass(login, password)
 	if user == nil {
 		err := &ErrorInMethod{}
-		err.SetError(errors.New("user not found"))
+		err.SetError(errors.New("user not found. login: " + login + " pass: " + password))
 		err.SetCode(http.StatusNotFound)
 		return nil, err
 	}

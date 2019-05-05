@@ -1,11 +1,14 @@
 import {createStore, applyMiddleware, combineReducers} from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
-import {Action, ReduxState} from "./structs";
+import {Action, ActionType, ReduxState} from "./structs";
 
 const data = (state :ReduxState = getBaseState(), action :Action) => {
-    // console.log(state);
-    // console.log(action);
+    switch (action.type) {
+        case ActionType.Login:
+            console.log(action);
+            return state;
+    }
     return state;
 };
 

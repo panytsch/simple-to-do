@@ -1,20 +1,24 @@
-import axios, {AxiosRequestConfig} from "axios"
-import {AnyAction, Dispatch} from "redux";
+import axios from "axios"
+import {Action, ActionType, LoginResponse} from "./structs";
 
 const host      = "http://127.0.0.1:8000/api/v1";
-const wsHost    = "ws://127.0.0.1:8000/ws/v1";
+// const wsHost    = "ws://127.0.0.1:8000/ws/v1";
 
-export const DoLogin = (login :string, password: string) => (dispatch :Dispatch) :void => {
-    axios({
-        method: 'get',
-        url:    `${host}/auth`,
-        headers: {
-            "Login": login,
-            "Password": password
-        }
-    })
+export const DoLogin = (login :string, password: string) => (dispatch :any) :void => {
+    axios
+        .post(`${host}/auth`,{
+            Login: login,
+            Password: password
+        })
         .then(value => {
-            console.log("then",value);
+            let responseData :LoginResponse = value.data;
+            if (responseData.Token !== '') {
+                let dispatchData :Action = {
+                    type:       ActionType.Login,
+                    Payload:    responseData
+                };
+                dispatch(dispatchData);
+            }
         })
         .catch(reason => {
             console.log("catch",reason);

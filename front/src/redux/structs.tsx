@@ -11,15 +11,18 @@ export interface Todo {
     IsDone      :boolean;
 }
 
-export interface WsResponse {
+export interface Response {
+    Message     :string
+}
+
+export interface WsResponse extends Response{
     Todos       ?:Todo[];
     Fail        :boolean;
-    Message     :string;
 }
 
 export interface Action {
-    Type        :ActionType;
-    Payload     :WsResponse;
+    type        :ActionType;
+    Payload     :Response;
 }
 
 export enum ActionType {
@@ -27,4 +30,9 @@ export enum ActionType {
     WsUpdate    = 'update',
     WsAdd       = 'add',
     WsDelete    = 'delete',
+    Login       = 'login'
+}
+
+export interface LoginResponse extends Response {
+    Token       :string
 }

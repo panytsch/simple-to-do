@@ -43,7 +43,20 @@ func Register(writer http.ResponseWriter, request *http.Request) {
 	}
 	writer.Header().Add("Content-Type", "application/json")
 
-	user, err := registerNewUser(request.Header.Get("login"), request.Header.Get("password"))
+	postRequest := entities.PostRegisterRequest{}
+	decoder := json.NewDecoder(request.Body)
+	er := decoder.Decode(&postRequest)
+	if er != nil {
+		log.Println("wrong request: ", er.Error())
+		response := entities.ErrorResponse{}
+		response.Message = er.Error()
+		writer.WriteHeader(http.StatusForbidden)
+		jsonResponse, _ := json.Marshal(response)
+		_, _ = writer.Write(jsonResponse)
+		return
+	}
+
+	user, err := registerNewUser(postRequest.Login, postRequest.Password)
 	if err != nil {
 		log.Println("register catch err: ", err.Error(), " code: ", err.GetCode())
 
