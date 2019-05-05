@@ -14,9 +14,9 @@ func main() {
 	dir := "./front/build"
 	router := mux.NewRouter()
 
-	router.PathPrefix("/api/v1/auth").HandlerFunc(method.Login)
-	router.PathPrefix("/api/v1/register").HandlerFunc(method.Register)
-	router.PathPrefix("/ws/v1/todo").HandlerFunc(websocket.TodoHandler)
+	router.PathPrefix("/api/v1/auth").HandlerFunc(method.Login).Methods("POST", "OPTIONS")
+	router.PathPrefix("/api/v1/register").HandlerFunc(method.Register).Methods("POST", "OPTIONS")
+	router.PathPrefix("/ws/v1/todo").HandlerFunc(websocket.TodoHandler).Methods("GET", "OPTIONS")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir(dir)))
 	srv := &http.Server{
