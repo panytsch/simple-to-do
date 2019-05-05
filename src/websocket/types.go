@@ -13,11 +13,10 @@ type (
 	}
 	Type          string
 	ClientRequest struct {
-		Type   Type
-		TodoID uint
-		Todo   models.ResponseTodo
-		Todos  []models.ResponseTodo
-		Token  string
+		Type  Type
+		Todo  models.ResponseTodo
+		Todos []models.ResponseTodo
+		Token string
 	}
 	ClientResponse struct {
 		Todos   []models.ResponseTodo

@@ -51,26 +51,78 @@ func readAndWrite(user *models.User, connection *websocket.Conn) {
 
 		switch clientRequest.Type {
 		case TypeConnect:
-			todos := user.GetAllTodos()
-			for _, todo := range todos {
-				clientResponse.Todos = append(clientResponse.Todos, todo.GetResponseTodo())
-			}
-			log.Println("Type ", TypeConnect, " is ok. response: ", clientResponse)
+			typeConnect(clientResponse, user)
 		case TypeAdd:
-			todo := models.Todo{}
-			todo.BuildFromResponseTodo(clientRequest.Todo)
-			todo.User = *user
-			todo.UserID = user.ID
-			errValidate := todo.Validate()
-			if errValidate != nil {
-				clientResponse.Fail = true
-				clientResponse.Message = errValidate.Error()
-				break
-			}
-			todo.SaveNew()
-			clientResponse.Todos = []models.ResponseTodo{todo.GetResponseTodo()}
+			typeAdd(clientRequest, clientResponse, user)
+		case TypeUpdate:
+			typeUpdate(clientRequest, clientResponse, user)
+		case TypeDelete:
+			typeDelete(clientRequest, clientResponse, user)
 		}
 		log.Println("Type ", clientRequest.Type, "| response: ", clientResponse)
 		_ = connection.WriteJSON(clientResponse)
+	}
+}
+
+func typeDelete(request *ClientRequest, response *ClientResponse, user *models.User) {
+	todo := models.Todo{}
+	if request.Todo.ID == 0 {
+		response.Fail = true
+		response.Message = "send todo id"
+		log.Println("todo id wasn't sent")
+		return
+	}
+	todo.FindByIdAndUserId(request.Todo.ID, user.ID)
+	if todo.ID == 0 {
+		response.Fail = true
+		response.Message = "todo not found"
+		log.Println("todo not found")
+		return
+	}
+	todo.Delete()
+	response.Message = "successfully"
+	log.Println("todo deleted", todo)
+}
+
+func typeUpdate(request *ClientRequest, response *ClientResponse, user *models.User) {
+	todo := models.Todo{}
+	if request.Todo.ID == 0 {
+		response.Fail = true
+		response.Message = "send todo id"
+		log.Println("todo id wasn't sent")
+		return
+	}
+	todo.FindByIdAndUserId(request.Todo.ID, user.ID)
+	if todo.ID == 0 {
+		response.Fail = true
+		response.Message = "todo not found"
+		log.Println("todo not found")
+		return
+	}
+	todo.BuildFromResponseTodo(request.Todo)
+	todo.Update()
+	response.Todos = []models.ResponseTodo{todo.GetResponseTodo()}
+	log.Println("todo updated")
+}
+
+func typeAdd(request *ClientRequest, response *ClientResponse, user *models.User) {
+	todo := models.Todo{}
+	todo.BuildFromResponseTodo(request.Todo)
+	todo.User = *user
+	todo.UserID = user.ID
+	errValidate := todo.Validate()
+	if errValidate != nil {
+		response.Fail = true
+		response.Message = errValidate.Error()
+		return
+	}
+	todo.SaveNew()
+	response.Todos = []models.ResponseTodo{todo.GetResponseTodo()}
+}
+
+func typeConnect(response *ClientResponse, user *models.User) {
+	todos := user.GetAllTodos()
+	for _, todo := range todos {
+		response.Todos = append(response.Todos, todo.GetResponseTodo())
 	}
 }

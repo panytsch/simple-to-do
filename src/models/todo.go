@@ -62,8 +62,12 @@ func (todo *Todo) Delete() {
 	db.GetDB().Delete(todo)
 }
 
-func (todo *Todo) FindById(id int) {
-	db.GetDB().Where("id = ?", id).Find(todo)
+func (todo *Todo) FindById(id uint) {
+	db.GetDB().Where("id = ? and deleted_at is null", id).Find(todo)
+}
+
+func (todo *Todo) FindByIdAndUserId(id uint, userID uint) {
+	db.GetDB().Where("id = ? and user_id = ? and deleted_at is null", id, userID).Find(todo)
 }
 
 //convert responseTodo to to do

@@ -35,7 +35,7 @@ func (User) TableName() string {
 
 func FindByNamePass(name string, pass string) *User {
 	var user = &User{}
-	db.GetDB().Where("login = ? and password = ?", name, pass).Find(user)
+	db.GetDB().Where("login = ? and password = ? and deleted_at is null", name, pass).Find(user)
 	if user.ID != 0 {
 		return user
 	}
@@ -92,19 +92,19 @@ func (u *User) Delete() {
 }
 
 func (u *User) FindById(id uint) {
-	db.GetDB().Where("id = ?", id).Find(u)
+	db.GetDB().Where("id = ? and deleted_at is null", id).Find(u)
 }
 
 func GetUserByToken(token string) *User {
 	user := &User{}
-	db.GetDB().Where("token = ?", token).Find(user)
+	db.GetDB().Where("token = ? and deleted_at is null", token).Find(user)
 	return user
 }
 
 func (u *User) GetAllTodos() []Todo {
 	var todos []Todo
 	selectFields := []string{"id", "created_at", "updated_at", "title", "description", "is_done"}
-	db.GetDB().Where("user_id = ?", u.ID).Where("deleted_at is null").Select(selectFields).Find(&todos)
+	db.GetDB().Where("user_id = ? and deleted_at is null", u.ID).Select(selectFields).Find(&todos)
 	return todos
 }
 
