@@ -59,6 +59,7 @@ func readAndWrite(user *models.User, connection *websocket.Conn) {
 		case TypeDelete:
 			typeDelete(clientRequest, clientResponse, user)
 		}
+		clientResponse.Type = clientRequest.Type
 		log.Println("Type ", clientRequest.Type, "| response: ", clientResponse)
 		_ = connection.WriteJSON(clientResponse)
 	}

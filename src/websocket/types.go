@@ -22,6 +22,7 @@ type (
 		Todos   []models.ResponseTodo
 		Fail    bool
 		Message string
+		Type    Type
 	}
 )
 
