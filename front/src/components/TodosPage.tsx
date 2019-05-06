@@ -33,6 +33,7 @@ class TodosPage extends React.Component<any> {
             this.props.history.push('/');
         };
     }
+
     componentWillUnmount(): void {
         if (this.WS !== null) {
             this.WS.close();
@@ -53,7 +54,8 @@ class TodosPage extends React.Component<any> {
         this.WsSend(WsRequest);
     }
 
-    render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+    render() {
+        console.log('render');
         const {Todos} = this.props;
         return <div>
             <form>
@@ -70,7 +72,7 @@ class TodosPage extends React.Component<any> {
             </form>
             <h3>My todos</h3>
             {
-                Todos.map((todo :Todo) => {
+                Todos && Todos.map((todo :Todo) => {
                     // @ts-ignore
                     return <TodoComponent Todo={todo}/>
                 })

@@ -13,9 +13,15 @@ export const WsConnectAction = (previousState :ReduxState, action :Action) :Redu
 
 export const WsAddAction = (previousState :ReduxState, action :Action) :ReduxState => {
     const payloadWsResponse :WsResponse = action.Payload as WsResponse;
-    let todosNew :Todo[] = previousState.Todos as Todo[];
+    let todosNew :Todo[] = previousState.Todos as Todo[] || [];
     const todoToAdd :Todo[] = payloadWsResponse.Todos as Todo[];
     todosNew.push(todoToAdd[0]);
-    previousState.Todos = todosNew;
-    return {...previousState};
+    let NewState :ReduxState = {
+        Login: previousState.Login,
+        Token: previousState.Token,
+        Todos: todosNew
+    };
+
+    console.log("store ", NewState);
+    return NewState;
 };

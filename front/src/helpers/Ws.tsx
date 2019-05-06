@@ -15,7 +15,6 @@ export interface WsRequest {
 }
 
 export const EventListener :EventListener = (event :any) => (dispatch :any)=> {
-    console.log(JSON.parse(event.data));
     const WsResponse :WsResponse = JSON.parse(event.data);
     if (!WsResponse.Fail) {
         const action :Action = {
