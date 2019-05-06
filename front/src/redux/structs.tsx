@@ -5,19 +5,14 @@ export interface ReduxState {
 }
 
 export interface Todo {
-    ID          :number;
-    Title       :string;
-    Description :string;
-    IsDone      :boolean;
+    ID          ?:number;
+    Title       ?:string;
+    Description ?:string;
+    IsDone      ?:boolean;
 }
 
 export interface Response {
     Message     :string
-}
-
-export interface WsResponse extends Response{
-    Todos       ?:Todo[];
-    Fail        :boolean;
 }
 
 export interface Action {
@@ -34,5 +29,14 @@ export enum ActionType {
 }
 
 export interface LoginResponse extends Response {
-    Token       :string
+    Token       :string;
+}
+
+export interface RegisterResponse extends Response {
+    Token       :string;
+}
+
+export interface PayloadResponse extends Response {
+    Token       :string;
+    Login       :string;
 }

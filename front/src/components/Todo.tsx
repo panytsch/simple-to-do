@@ -1,9 +1,9 @@
 import React from "react"
 
-import {Todo as TodoStruct} from "../redux/structs"
+import {Todo} from "../redux/structs"
 
-export const Todo :React.FC = (props :any) => {
-    const todo :TodoStruct = props.Todo;
+export const TodoComponent :React.FC = (props :any) => {
+    const todo :Todo = props.Todo;
     return (
         <div className="todo">
             <span>{todo.ID}</span>

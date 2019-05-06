@@ -18,6 +18,8 @@ func main() {
 	router.PathPrefix("/api/v1/register").HandlerFunc(method.Register).Methods("POST", "OPTIONS")
 	router.PathPrefix("/ws/v1/todo").HandlerFunc(websocket.TodoHandler).Methods("GET", "OPTIONS")
 
+	//TODO: if route "/register" we won't see register page because file register not found :)
+
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir(dir)))
 	srv := &http.Server{
 		Handler: router,
