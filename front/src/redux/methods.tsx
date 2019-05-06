@@ -1,8 +1,8 @@
 import axios, {AxiosResponse} from "axios"
-import {Action, ActionType, LoginResponse, RegisterResponse} from "./structs";
+import {Action, ActionType, PayloadResponse} from "./structs";
 
 const host      = "http://127.0.0.1:8000/api/v1";
-// const wsHost    = "ws://127.0.0.1:8000/ws/v1";
+export const WsHost    = "ws://127.0.0.1:8000/ws/v1";
 
 export const DoLogin = (login :string, password: string) => (dispatch :any) :void => {
     axios
@@ -11,7 +11,8 @@ export const DoLogin = (login :string, password: string) => (dispatch :any) :voi
             Password: password
         })
         .then((value :AxiosResponse) => {
-            let responseData :LoginResponse = value.data;
+            let responseData :PayloadResponse = value.data;
+            responseData.Login = login;
             if (responseData.Token !== '') {
                 let dispatchData :Action = {
                     type:       ActionType.Login,
@@ -32,7 +33,8 @@ export const DoRegister = (login :string, password :string) => (dispatch :any) :
             Password: password
         })
         .then( (response :AxiosResponse) => {
-            let responseData :RegisterResponse = response.data;
+            let responseData :PayloadResponse = response.data;
+            responseData.Login = login;
             if (responseData.Token !== '') {
                 let dispatchData :Action = {
                     type:       ActionType.Login,

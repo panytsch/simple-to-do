@@ -1,6 +1,6 @@
-import {Action, LoginResponse, ReduxState} from "./structs";
+import {Action, PayloadResponse, ReduxState} from "./structs";
 
 export const LoginAction = (previousState :ReduxState ,action :Action) :ReduxState => {
-    let payloadLoginResponse :LoginResponse = action.Payload as LoginResponse;
-    return {...previousState, Token: payloadLoginResponse.Token};
+    let payloadLoginResponse :PayloadResponse = action.Payload as PayloadResponse;
+    return {...previousState, Token: payloadLoginResponse.Token, Login: payloadLoginResponse.Login};
 };

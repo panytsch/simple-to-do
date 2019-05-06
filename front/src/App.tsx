@@ -6,6 +6,7 @@ import store from "./redux/store";
 import StartPage from "./components/StartPage";
 import './App.css';
 import RegisterPage from "./components/RegisterPage";
+import TodosPage from "./components/TodosPage";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
               <div>
                   <Route exact path="/" component={StartPage} />
                   <Route path="/register" component={RegisterPage} />
+                  <Route path="/todos" component={TodosPage} />
               </div>
           </Router>
       </Provider>
