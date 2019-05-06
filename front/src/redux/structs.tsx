@@ -36,3 +36,7 @@ export enum ActionType {
 export interface LoginResponse extends Response {
     Token       :string
 }
+
+export interface RegisterResponse extends Response {
+    Token       :string
+}
