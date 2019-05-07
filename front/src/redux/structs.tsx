@@ -1,7 +1,10 @@
-export interface ReduxState {
+export interface ReduxStateUserInterface {
     Login       :string;
     Token       :string;
-    Todos       ?:Todo[];
+}
+
+export interface ReduxStateTodosInterface {
+    Todos       :Todo[];
 }
 
 export interface Todo {
