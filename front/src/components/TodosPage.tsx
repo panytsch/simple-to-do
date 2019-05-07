@@ -1,6 +1,6 @@
 import React from "react";
 import {WsHost} from "../redux/methods";
-import {ActionType, ReduxState, Todo} from "../redux/structs";
+import {ActionType, Todo} from "../redux/structs";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import {TodoComponent} from "./Todo";
@@ -13,10 +13,10 @@ class TodosPage extends React.Component<any> {
 
     constructor(props :any) {
         super(props);
-        if (props.Token === '') {
+        if (props.userData.Token === '') {
             props.history.push('/') //redirect
         }
-        this.WS = new WebSocket(`${WsHost}/todo?token=${props.Token}`);
+        this.WS = new WebSocket(`${WsHost}/todo?token=${props.userData.Token}`);
     }
     WsSend(request :WsRequest) :void {
         this.WS.send(JSON.stringify(request));
@@ -26,7 +26,7 @@ class TodosPage extends React.Component<any> {
         this.WS.onopen = () => {
             this.WsSend({
                 Type: ActionType.WsConnect,
-                Token: this.props.Token
+                Token: this.props.userData.Token
             });
         };
         this.WS.onclose = () => {
@@ -55,8 +55,7 @@ class TodosPage extends React.Component<any> {
     }
 
     render() {
-        console.log('render');
-        const {Todos} = this.props;
+        const {Todos} = this.props.userTodos;
         return <div>
             <form>
                 <label htmlFor="new_title">Title</label>
@@ -85,7 +84,7 @@ const mapDispatchToProps = (dispatch :any) => ({
     EventListener: (event :any) => dispatch(EventListener(event)),
 });
 
-const mapStateToProps = (state :any) :ReduxState => state.data;
+const mapStateToProps = (state :any) :object => state;
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     withRouter(TodosPage)

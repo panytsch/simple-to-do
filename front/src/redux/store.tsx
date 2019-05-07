@@ -1,13 +1,18 @@
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {composeWithDevTools} from "redux-devtools-extension";
 import thunk from "redux-thunk";
-import {Action, ActionType, ReduxState} from "./structs";
+import {Action, ActionType, ReduxStateTodosInterface, ReduxStateUserInterface} from "./structs";
 import {LoginAction, WsAddAction, WsConnectAction} from "./actions";
 
-const data = (state :ReduxState = getBaseState(), action :Action) => {
+const userData = (state :ReduxStateUserInterface = getBaseStateUserData(), action :Action) :ReduxStateUserInterface => {
+    if (action.type === ActionType.Login) {
+        return LoginAction(state, action);
+    }
+    return state;
+};
+
+const userTodos = (state :ReduxStateTodosInterface = getBaseUserTodos(), action :Action) :ReduxStateTodosInterface => {
     switch (action.type) {
-        case ActionType.Login:
-            return LoginAction(state, action);
         case ActionType.WsConnect:
             return WsConnectAction(state, action);
         case ActionType.WsAdd:
@@ -16,15 +21,21 @@ const data = (state :ReduxState = getBaseState(), action :Action) => {
     return state;
 };
 
-function getBaseState() :ReduxState {
+function getBaseUserTodos() :ReduxStateTodosInterface {
+    return {
+        Todos: []
+    }
+}
+
+function getBaseStateUserData() :ReduxStateUserInterface {
     return {
         Login: '',
         Token: '',
-        Todos: []
     };
 }
 
-const reducers = combineReducers({ data });
+// @ts-ignore
+const reducers = combineReducers({ userData, userTodos });
 
 const Store = createStore(
     reducers,

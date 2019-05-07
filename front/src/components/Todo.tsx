@@ -5,7 +5,7 @@ import {Todo} from "../redux/structs"
 export const TodoComponent :React.FC = (props :any) => {
     const todo :Todo = props.Todo;
     return (
-        <div className="todo">
+        <div className="todo" key={todo.ID}>
             <span>{todo.ID}</span>
             <input type="checkbox" checked={todo.IsDone}/>
             <span>{todo.Title}</span>

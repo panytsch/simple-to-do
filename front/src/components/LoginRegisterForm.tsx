@@ -1,6 +1,6 @@
 import React from "react";
 import {DoLogin, DoRegister} from "../redux/methods";
-import {ReduxState} from "../redux/structs";
+import {ReduxStateUserInterface} from "../redux/structs";
 import {connect} from "react-redux";
 import {withRouter} from "react-router";
 import {Link} from "react-router-dom";
@@ -47,7 +47,7 @@ const mapDispatchToProps = (dispatch :any) => ({
     DoRegister: (login :string, pass :string) => dispatch(DoRegister(login, pass))
 });
 
-const mapStateToProps = (state :any) :ReduxState => state.data;
+const mapStateToProps = (state :any) :ReduxStateUserInterface => state.userData;
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     withRouter(LoginRegisterForm)
