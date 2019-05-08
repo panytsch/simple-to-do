@@ -12,11 +12,26 @@ export const WsConnectAction = (previousState :ReduxStateTodosInterface, action 
 };
 
 export const WsAddAction = (previousState :ReduxStateTodosInterface, action :Action) :ReduxStateTodosInterface => {
-    const payloadWsResponse :WsResponse = action.Payload as WsResponse;
-    let todosNew :Todo[] = previousState.Todos as Todo[] || [];
-    const todoToAdd :Todo[] = payloadWsResponse.Todos as Todo[];
-    todosNew.push(todoToAdd[0]);
+    const Helper = new WsReducerHelper(previousState.Todos);
+    let todoToAdd :Todo = ((action.Payload as WsResponse).Todos as Todo[])[0] || null;
     let NewState :ReduxStateTodosInterface = Object.create(null);
-    NewState.Todos = [...todosNew];
+    if (!todoToAdd) {
+        return previousState;
+    }
+    NewState.Todos = Helper.addTodo(todoToAdd);
     return NewState;
 };
+
+class WsReducerHelper {
+    private readonly Todos :Todo[];
+    constructor(todos :Todo[]){
+        this.Todos = todos;
+    }
+    public addTodo(todo: Todo) :Todo[] {
+        this.Todos.push(todo);
+        return this.getTodos();
+    }
+    private getTodos() :Todo[] {
+        return [...this.Todos]
+    }
+}
