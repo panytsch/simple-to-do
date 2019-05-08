@@ -82,6 +82,7 @@ func typeDelete(request *ClientRequest, response *ClientResponse, user *models.U
 	}
 	todo.Delete()
 	response.Message = "successfully"
+	response.Todos = []models.ResponseTodo{todo.GetResponseTodo()}
 	log.Println("todo deleted", todo)
 }
 
