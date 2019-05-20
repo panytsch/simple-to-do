@@ -54,6 +54,24 @@ class TodosPage extends React.Component<any> {
         this.WsSend(WsRequest);
     }
 
+    UpdateTodo(todo :Todo) {
+        const WsRequest :WsRequest = {
+            Token:      this.props.Token,
+            Type:       ActionType.WsUpdate,
+            Todo:       todo
+        };
+        this.WsSend(WsRequest);
+    }
+
+    DeleteTodo(todo :Todo) {
+        const WsRequest :WsRequest = {
+            Token:      this.props.Token,
+            Type:       ActionType.WsDelete,
+            Todo:       todo
+        };
+        this.WsSend(WsRequest);
+    }
+
     render() {
         const {Todos} = this.props.userTodos;
         return <div>
@@ -73,7 +91,12 @@ class TodosPage extends React.Component<any> {
             {
                 Todos && Todos.map((todo :Todo) => {
                     // @ts-ignore
-                    return <TodoComponent Todo={todo}/>
+                    return <TodoComponent
+                        key={todo.ID}
+                        Todo={todo}
+                        handlerDone={() => {this.UpdateTodo({...todo, IsDone: !todo.IsDone})}}
+                        handlerDelete={() => {this.DeleteTodo(todo)}}
+                    />
                 })
             }
         </div>;
