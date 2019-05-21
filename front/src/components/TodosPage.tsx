@@ -40,7 +40,7 @@ class TodosPage extends React.Component<any> {
         }
     }
 
-    AddTodo(e :Event) {
+    AddTodo(e :Event) :void {
         e.preventDefault();
         const NewTodo :Todo = {
             Title: this.newTodoTitle,
@@ -54,7 +54,7 @@ class TodosPage extends React.Component<any> {
         this.WsSend(WsRequest);
     }
 
-    UpdateTodo(todo :Todo) {
+    UpdateTodo(todo :Todo) :void {
         const WsRequest :WsRequest = {
             Token:      this.props.Token,
             Type:       ActionType.WsUpdate,
@@ -63,7 +63,7 @@ class TodosPage extends React.Component<any> {
         this.WsSend(WsRequest);
     }
 
-    DeleteTodo(todo :Todo) {
+    DeleteTodo(todo :Todo) :void {
         const WsRequest :WsRequest = {
             Token:      this.props.Token,
             Type:       ActionType.WsDelete,
