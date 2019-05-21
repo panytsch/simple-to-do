@@ -28,15 +28,11 @@ const LoginRegisterForm :React.FC = (props :any) => {
             <br/>
             <button type="submit" onClick={(e: any) => {
                 e.preventDefault();
-                switch (action) {
-                    case LoginRegisterFormActionType.Login:
-                        props.DoLogin(login, password);
-                        break;
-                    case LoginRegisterFormActionType.Register:
-                        props.DoRegister(login, password);
-                        break;
+                action === LoginRegisterFormActionType.Login 
+                    ? props.DoLogin(login, password)
+                    : props.DoRegister(login, password);
                 }
-            }}>Login
+            }>{action === LoginRegisterFormActionType.Login ? 'Login' : 'Register'}
             </button>
         </form>
     );
